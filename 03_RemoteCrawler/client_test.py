@@ -7,6 +7,8 @@ import time
 PACKET_SIZE_LIMIT = 800
 FRAME_WIDTH = 0
 FRAME_HEIGHT = 0
+GRID_X = 2
+GRID_Y = 2
 grid = 0
 
 def receive_frame(server_socket):
@@ -33,17 +35,22 @@ def main():
   client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   client_socket.connect(('127.0.0.1', 8000))
   print('サーバーに接続しました')
+  #frames[]
   i=1
 
   try:
     while True:
-      request = b'RQST' + struct.pack(">I", i)
+      request = b'SHOT' + struct.pack(">II", GRID_X, GRID_Y)
       client_socket.sendall(request)
-      #client_socket.sendall(struct.pack('>L', i))
-      # フレームを受信して表示
-      frame = receive_frame(client_socket)
-      cv2.imshow('Received Frame', frame)
-      i=i%4+1
+      print('撮影要求')
+      for i in range(1,4):
+        request = b'RQST' + struct.pack(">II", i,0)
+        client_socket.sendall(request)
+        print('画像要求')
+        #client_socket.sendall(struct.pack('>L', i))
+        # フレームを受信して表示
+        frame = receive_frame(client_socket)
+        cv2.imshow('Received Frame', frame)
 
       # 'q'を押すと終了
       if cv2.waitKey(1) & 0xFF == ord('q'):
