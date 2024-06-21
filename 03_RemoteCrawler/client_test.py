@@ -35,15 +35,13 @@ def main():
   client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   client_socket.connect(('127.0.0.1', 8000))
   print('サーバーに接続しました')
-  #frames[]
-  i=1
 
   try:
     while True:
       request = b'SHOT' + struct.pack(">II", GRID_X, GRID_Y)
       client_socket.sendall(request)
       print('撮影要求')
-      for i in range(1,4):
+      for i in range(1,GRID_X*GRID_Y):
         request = b'RQST' + struct.pack(">II", i,0)
         client_socket.sendall(request)
         print('画像要求')
