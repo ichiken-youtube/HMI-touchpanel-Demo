@@ -1,7 +1,6 @@
 import cv2
 import socket
 import struct
-import time
 
 PACKET_SIZE_LIMIT = 800
 FRAME_WIDTH =120
