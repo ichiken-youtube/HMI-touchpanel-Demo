@@ -98,6 +98,8 @@ def main():
         GRID_Y = params[1]
         print(GRID_X,GRID_Y)
         frame=shot(cap)
+      else:
+        pass
   except Exception as e:
     print(f'エラーが発生しました: {e}')
   finally:
