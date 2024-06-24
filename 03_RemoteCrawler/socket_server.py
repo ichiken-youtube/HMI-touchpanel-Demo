@@ -2,6 +2,7 @@ import cv2
 import socket
 import struct
 from threading import Thread
+from picamera2 import Picamera2
 import random
 
 PACKET_SIZE_LIMIT = 800
@@ -54,8 +55,10 @@ def send_frame(frame, grid, client_socket):
     #time.sleep(0.01)
 
 def shot(cap):
-  ret,frame = cap.read()
-  if not ret:
+  frame = cap.capture_array()
+  #ret,frame = cap.read()
+  #if not ret:
+  if not frame:
     print("フレームをキャプチャできませんでした。")
     cap.release()
     exit()
@@ -65,10 +68,13 @@ def main(client_socket):
   global grid_flag_mask
   global latest_grid_flag
   # Webカメラのキャプチャ
-  cap = cv2.VideoCapture(0)
+  '''cap = cv2.VideoCapture(0)
   if not cap.isOpened():
     print("カメラを開くことができませんでした。")
-    exit()
+    exit()'''
+  cap = Picamera2()
+  cap.start()
+  cap.set_controls({'AfMode': controls.AfModeEnum.Continuous}
   frame=shot(cap)
 
   try:
