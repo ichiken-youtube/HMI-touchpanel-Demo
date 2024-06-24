@@ -59,12 +59,11 @@ def shot(cap):
   #ret,frame = cap.read()
   #if not ret:
   if len(frame)==0:
-    print("フレームをキャプチャできませんでした。")
-    cap.close()
-    exit()
+    raise Exception("フレームをキャプチャできませんでした。")
+    #exit()
   return frame
 
-def main(client_socket):
+def main(client_socket,cap):
   global grid_flag_mask
   global latest_grid_flag
   # Webカメラのキャプチャ
@@ -72,8 +71,6 @@ def main(client_socket):
   if not cap.isOpened():
     print("カメラを開くことができませんでした。")
     exit()'''
-  cap = Picamera2()
-  cap.start()
   #cap.set_controls({'AfMode': controls.AfModeEnum.Continuous})
   frame=shot(cap)
 
@@ -128,7 +125,6 @@ def main(client_socket):
   except Exception as e:
     print(f'エラーが発生しました: {e}')
   finally:
-    cap.close()
     client_socket.close()
 
 if __name__ == '__main__':
@@ -136,6 +132,10 @@ if __name__ == '__main__':
   server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 5)
   server_socket.bind(('0.0.0.0', 8000))
   server_socket.listen(5)
+  
+  cap = Picamera2()
+  cap.start()
+
   try:
     while True:
       print("接続待機中...")
@@ -143,10 +143,11 @@ if __name__ == '__main__':
       # ソケット設定
       client_socket.settimeout(60)
       print(f'クライアント {client_address} と接続されました')
-      thread = Thread(target = main,args=(client_socket,), daemon= True)
+      thread = Thread(target = main,args=(client_socket,cap), daemon= True)
       thread.start()
   except KeyboardInterrupt:
     print("\nサーバーを停止します")
+    cap.close()
   finally:
     server_socket.close()
 
