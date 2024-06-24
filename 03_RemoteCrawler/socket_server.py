@@ -60,7 +60,7 @@ def shot(cap):
   #if not ret:
   if len(frame)==0:
     print("フレームをキャプチャできませんでした。")
-    cap.release()
+    cap.close()
     exit()
   return frame
 
@@ -128,7 +128,7 @@ def main(client_socket):
   except Exception as e:
     print(f'エラーが発生しました: {e}')
   finally:
-    cap.release()
+    cap.close()
     client_socket.close()
 
 if __name__ == '__main__':
