@@ -3,7 +3,9 @@ import socket
 import struct
 import numpy as np
 import time
+import settings
 
+SERVER_IP = settings.SERVER_IP
 PACKET_SIZE_LIMIT = 800
 FRAME_WIDTH = 0
 FRAME_HEIGHT = 0
@@ -35,7 +37,7 @@ def receive_frame(server_socket):
 def main():
   # ソケット設定
   client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  client_socket.connect(('127.0.0.1', 8000))
+  client_socket.connect((SERVER_IP, 8000))
   print('サーバーに接続しました')
   full_frame = np.zeros((90*2, 120*2, 4), dtype=np.uint8)
   grid = 0
