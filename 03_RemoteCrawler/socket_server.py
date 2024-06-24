@@ -7,9 +7,11 @@ import random
 PACKET_SIZE_LIMIT = 800
 FRAME_WIDTH =120
 FRAME_HEIGHT =90
-GRID_X = 0
-GRID_Y = 0
-grid = 3
+GRID_X = 1
+GRID_Y = 1
+#grid = 1
+latest_grid_flag = 0
+grid_flag_mask = 0
 
 def split_image(grid_x, grid_y, grid_number, frame):
   # 画像の高さと幅を取得
@@ -60,6 +62,8 @@ def shot(cap):
   return frame
 
 def main(client_socket):
+  global grid_flag_mask
+  global latest_grid_flag
   # Webカメラのキャプチャ
   cap = cv2.VideoCapture(0)
   if not cap.isOpened():
@@ -72,14 +76,26 @@ def main(client_socket):
       # クライアントからの送信要求を待つ
       #print('送信要求待ち')
       request = client_socket.recv(12)
-      print(request)
+      if len(request) > 0:
+        print(request)
       if request[:4] == b'RQST':
         grid = struct.unpack(">I",request[4:8])[0]
-        if(grid==0 or None):
-          grid = int(random.randint(1, GRID_X*GRID_Y))
+        if grid==0 :
+          if latest_grid_flag == grid_flag_mask:
+            latest_grid_flag=0
+            grid = 1
+          elif latest_grid_flag>0:
+            for i in range(GRID_X*GRID_Y):
+              if (latest_grid_flag >> i) & 0b1 == 0b00 :
+                grid = i+1
+                break
+          else:
+            grid = 1
+          
+        #print('latest_grid_flag:'+bin(latest_grid_flag))
+        latest_grid_flag = ((0b1<<(grid-1))|latest_grid_flag) & grid_flag_mask
+        print('latest_grid_flag:'+bin(latest_grid_flag))
         print('grid:'+str(grid))
-
-        #resized_frame = cv2.resize(frame, (FRAME_WIDTH, FRAME_HEIGHT))
         resized_frame = split_image(GRID_X, GRID_Y, grid, frame)
 
         # OpenCVのBGRからRGBに変換
@@ -93,6 +109,13 @@ def main(client_socket):
         GRID_X = params[0]
         GRID_Y = params[1]
         print(GRID_X,GRID_Y)
+        if grid_flag_mask == 0b0 or None:
+          #print('grid_flag_mask初期化')
+          for i in range(GRID_X*GRID_Y):
+            #print(i)
+            grid_flag_mask = (1 << i) | grid_flag_mask
+          print('grid_flag_mask:'+bin(grid_flag_mask))
+        #latest_grid_flag = 0b0
         frame=shot(cap)
       else:
         pass
