@@ -58,7 +58,7 @@ def shot(cap):
   frame = cap.capture_array()
   #ret,frame = cap.read()
   #if not ret:
-  if not frame:
+  if len(frame)==0:
     print("フレームをキャプチャできませんでした。")
     cap.release()
     exit()
@@ -74,7 +74,7 @@ def main(client_socket):
     exit()'''
   cap = Picamera2()
   cap.start()
-  cap.set_controls({'AfMode': controls.AfModeEnum.Continuous}
+  #cap.set_controls({'AfMode': controls.AfModeEnum.Continuous})
   frame=shot(cap)
 
   try:
