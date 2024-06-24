@@ -105,7 +105,7 @@ def main(client_socket):
         resized_frame = split_image(GRID_X, GRID_Y, grid, frame)
 
         # OpenCVのBGRからRGBに変換
-        rgb_frame = cv2.cvtColor(resized_frame, cv2.COLOR_BGR2BGRA)
+        rgb_frame = cv2.cvtColor(resized_frame, cv2.COLOR_BGR2RGBA)
         # フレームを送信
         send_frame(rgb_frame, grid, client_socket)
         print('送信完了')
