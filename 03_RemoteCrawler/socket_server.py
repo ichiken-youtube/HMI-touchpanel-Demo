@@ -10,6 +10,7 @@ FRAME_WIDTH =120
 FRAME_HEIGHT =90
 GRID_X = 1
 GRID_Y = 1
+REQUEST_PACKET_SIZE = 12
 #grid = 1
 latest_grid_flag = 0
 grid_flag_mask = 0
@@ -66,6 +67,9 @@ def shot(cap):
 def main(client_socket,cap):
   global grid_flag_mask
   global latest_grid_flag
+  
+  # ソケット設定
+  client_socket.settimeout(60)
   # Webカメラのキャプチャ
   '''cap = cv2.VideoCapture(0)
   if not cap.isOpened():
@@ -76,13 +80,17 @@ def main(client_socket,cap):
 
   try:
     while True:
-      # クライアントからの送信要求を待つ
-      #print('送信要求待ち')
-      request = client_socket.recv(12)
+      # クライアントからのrequestを待つ
+      request = b''
       params=b''
-      if len(request) > 0:
-        print(request)
-        params = struct.unpack(">II",request[4:12])
+      while len(request) < REQUEST_PACKET_SIZE:
+        request += client_socket.recv(min(REQUEST_PACKET_SIZE-len(request), REQUEST_PACKET_SIZE))
+
+      if len(request) != REQUEST_PACKET_SIZE :
+        continue
+
+      print(request)
+      params = struct.unpack(">II",request[4:12])
       if request[:4] == b'RQST':
         grid = params[0]#struct.unpack(">I",request[4:8])[0]
         if grid==0 :
@@ -145,8 +153,6 @@ if __name__ == '__main__':
     while True:
       print("接続待機中...")
       client_socket, client_address = server_socket.accept()
-      # ソケット設定
-      client_socket.settimeout(60)
       print(f'クライアント {client_address} と接続されました')
       thread = Thread(target = main,args=(client_socket,cap), daemon= True)
       thread.start()
