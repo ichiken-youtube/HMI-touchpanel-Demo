@@ -3,7 +3,7 @@ import socket
 import struct
 from threading import Thread
 from picamera2 import Picamera2
-import motor
+#import motor
 
 PACKET_SIZE_LIMIT = 800
 FRAME_WIDTH =120
@@ -79,9 +79,10 @@ def main(client_socket,cap):
       # クライアントからの送信要求を待つ
       #print('送信要求待ち')
       request = client_socket.recv(12)
+      params=b''
       if len(request) > 0:
         print(request)
-      params = struct.unpack(">II",request[4:12])
+        params = struct.unpack(">II",request[4:12])
       if request[:4] == b'RQST':
         grid = params[0]#struct.unpack(">I",request[4:8])[0]
         if grid==0 :
@@ -123,7 +124,7 @@ def main(client_socket,cap):
         frame=shot(cap)
       if request[:4] == b'COMM':
         #params = struct.unpack(">II",request[4:12])
-        motor.motor(params[0],params[1])
+        pass#motor.motor(params[0],params[1])
       else:
         pass
   except Exception as e:
