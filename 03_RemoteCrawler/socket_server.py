@@ -3,7 +3,7 @@ import socket
 import struct
 from threading import Thread
 from picamera2 import Picamera2
-#import motor
+import motor
 
 PACKET_SIZE_LIMIT = 800
 FRAME_WIDTH =120
@@ -132,7 +132,7 @@ def main(client_socket,cap):
         frame=shot(cap)
       if request[:4] == b'COMM':
         #params = struct.unpack(">II",request[4:12])
-        pass#motor.motor(params[0],params[1])
+        motor.motor(params[0],params[1])
       else:
         pass
   except Exception as e:
