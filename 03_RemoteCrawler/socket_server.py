@@ -87,7 +87,7 @@ def main(client_socket,cap):
       print(request)
       params = struct.unpack(">II",request[4:12])
       if request[:4] == b'RQST':
-        grid = params[0]#struct.unpack(">I",request[4:8])[0]
+        grid = params[0]
         if grid==0 :
           if latest_grid_flag == grid_flag_mask:
             latest_grid_flag=0
