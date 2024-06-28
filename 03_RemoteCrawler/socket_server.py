@@ -11,7 +11,6 @@ FRAME_HEIGHT =90
 GRID_X = 1
 GRID_Y = 1
 REQUEST_PACKET_SIZE = 12
-#grid = 1
 latest_grid_flag = 0
 grid_flag_mask = 0
 
@@ -45,15 +44,11 @@ def send_frame(frame, grid, client_socket):
   header = struct.pack(">LLLL", FRAME_WIDTH, FRAME_HEIGHT, grid, size)
   print(FRAME_WIDTH, FRAME_HEIGHT, grid, size)
   client_socket.sendall(header)
-  #client_socket.sendall(struct.pack('>L', size))
   print('size:'+str(size))
   # フレームデータを送信
   for i in range(0, size, PACKET_SIZE_LIMIT):
-    #print('chunk:'+str(i)+'-'+str(min(i + PACKET_SIZE_LIMIT,size)))
     chunk = image_bytes[i:min(i + PACKET_SIZE_LIMIT,size)]
-    #print(len(chunk))
     client_socket.sendall(chunk)
-    #time.sleep(0.01)
 
 def shot(cap):
   frame = cap.capture_array()
@@ -125,13 +120,10 @@ def main(client_socket,cap):
         if grid_flag_mask == 0b0 or None:
           #print('grid_flag_mask初期化')
           for i in range(GRID_X*GRID_Y):
-            #print(i)
             grid_flag_mask = (1 << i) | grid_flag_mask
           print('grid_flag_mask:'+bin(grid_flag_mask))
-        #latest_grid_flag = 0b0
         frame=shot(cap)
       if request[:4] == b'COMM':
-        #params = struct.unpack(">II",request[4:12])
         motor.motor(params[0],params[1])
       else:
         pass
