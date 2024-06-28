@@ -15,41 +15,49 @@ def motor(direction, power=50):
   PWM.ChangeDutyCycle( power )
   #進行方向はテンキーと同じ配列
   if direction == 1:
+    print("↙")
     GPIO.output(PINS['L_F'], GPIO.LOW)
     GPIO.output(PINS['L_R'], GPIO.LOW)
     GPIO.output(PINS['R_F'], GPIO.HIGH)
     GPIO.output(PINS['R_R'], GPIO.LOW)
   elif direction == 2:
+    print("↓")
     GPIO.output(PINS['L_F'], GPIO.LOW)
     GPIO.output(PINS['L_R'], GPIO.HIGH)
     GPIO.output(PINS['R_F'], GPIO.LOW)
     GPIO.output(PINS['R_R'], GPIO.HIGH)
   elif direction == 3:
+    print("↘")
     GPIO.output(PINS['L_F'], GPIO.LOW)
     GPIO.output(PINS['L_R'], GPIO.HIGH)
     GPIO.output(PINS['R_F'], GPIO.LOW)
     GPIO.output(PINS['R_R'], GPIO.LOW)
   elif direction == 4:
+    print("⟲")
     GPIO.output(PINS['L_F'], GPIO.LOW)
     GPIO.output(PINS['L_R'], GPIO.HIGH)
     GPIO.output(PINS['R_F'], GPIO.HIGH)
     GPIO.output(PINS['R_R'], GPIO.LOW)
   elif direction == 6:
+    print("⟳")
     GPIO.output(PINS['L_F'], GPIO.HIGH)
     GPIO.output(PINS['L_R'], GPIO.LOW)
     GPIO.output(PINS['R_F'], GPIO.LOW)
     GPIO.output(PINS['R_R'], GPIO.HIGH)
   elif direction == 7:
+    print("↖")
     GPIO.output(PINS['L_F'], GPIO.LOW)
     GPIO.output(PINS['L_R'], GPIO.LOW)
     GPIO.output(PINS['R_F'], GPIO.HIGH)
     GPIO.output(PINS['R_R'], GPIO.LOW)
   elif direction == 8:
+    print("↑")
     GPIO.output(PINS['L_F'], GPIO.HIGH)
     GPIO.output(PINS['L_R'], GPIO.LOW)
     GPIO.output(PINS['R_F'], GPIO.HIGH)
     GPIO.output(PINS['R_R'], GPIO.LOW)
   elif direction == 9:
+    print("↗")
     GPIO.output(PINS['L_F'], GPIO.HIGH)
     GPIO.output(PINS['L_R'], GPIO.LOW)
     GPIO.output(PINS['R_F'], GPIO.LOW)
