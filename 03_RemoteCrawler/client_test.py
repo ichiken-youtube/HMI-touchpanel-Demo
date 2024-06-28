@@ -37,6 +37,7 @@ def receive_frame(server_socket):
 def main():
   # ソケット設定
   client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+  client_socket.settimeout(10)
   client_socket.connect((SERVER_IP, 8000))
   print('サーバーに接続しました')
   full_frame = np.zeros((90*2, 120*2, 4), dtype=np.uint8)
@@ -55,7 +56,10 @@ def main():
           #client_socket.sendall(struct.pack('>L', i))
           # フレームを受信して表示
           frame,grid = receive_frame(client_socket)
-          full_frame[y*FRAME_HEIGHT:(y+1)*FRAME_HEIGHT, x*FRAME_WIDTH:(x+1)*FRAME_WIDTH] = frame
+          print(int((grid-1)/GRID_X))
+          print((grid-1)%GRID_X)
+          #full_frame[y*FRAME_HEIGHT:(y+1)*FRAME_HEIGHT, x*FRAME_WIDTH:(x+1)*FRAME_WIDTH] = frame
+          full_frame[int((grid-1)/GRID_X)*FRAME_HEIGHT:(int((grid-1)/GRID_X)+1)*FRAME_HEIGHT, ((grid-1)%GRID_X)*FRAME_WIDTH:((grid-1)%GRID_X+1)*FRAME_WIDTH] = frame
           cv2.imshow('Received Frame', full_frame)
           time.sleep(1)
 
