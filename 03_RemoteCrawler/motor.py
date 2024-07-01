@@ -5,6 +5,9 @@ PINS={'L_F':3, 'L_R':2 , 'R_F':17, 'R_R':4, 'SC_A':27, 'SC_B':22, 'PWM':18}
 
 GPIO.setmode(GPIO.BCM)
 
+start_time = time.time()
+prev_command = 0
+
 for key in PINS.keys():
   GPIO.setup(PINS[key], GPIO.OUT)
   GPIO.output(PINS[key], GPIO.LOW)
@@ -79,6 +82,10 @@ def motor(direction, power=50):
     GPIO.output(PINS['R_R'], GPIO.LOW)
     GPIO.output(PINS['SC_A'], GPIO.LOW)
     GPIO.output(PINS['SC_B'], GPIO.LOW)
+
+  if prev_command != direction and ( direction <= 9 and direction != 5):
+    time.sleep(0.5)
+  prev_command = direction
 
 if __name__ == '__main__':
   try:
