@@ -63,11 +63,11 @@ def motor(direction, power=50):
     GPIO.output(PINS['R_F'], GPIO.LOW)
     GPIO.output(PINS['R_R'], GPIO.LOW)
   elif direction == 10:
-    print("↑")
+    print("▲")
     GPIO.output(PINS['SC_A'], GPIO.HIGH)
     GPIO.output(PINS['SC_B'], GPIO.LOW)
   elif direction == 11:
-    print("↗")
+    print("▼")
     GPIO.output(PINS['SC_A'], GPIO.LOW)
     GPIO.output(PINS['SC_B'], GPIO.HIGH)
   else:
