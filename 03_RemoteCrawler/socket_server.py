@@ -123,8 +123,13 @@ def main(client_socket,cap):
             grid_flag_mask = (1 << i) | grid_flag_mask
           print('grid_flag_mask:'+bin(grid_flag_mask))
         frame=shot(cap)
-      if request[:4] == b'COMM':
+
+      elif request[:4] == b'COMM':
         motor.motor(params[0],params[1])
+
+      elif request[:4] == b'PING':
+        client_socket.sendall(b'PONG')
+        
       else:
         pass
   except Exception as e:
