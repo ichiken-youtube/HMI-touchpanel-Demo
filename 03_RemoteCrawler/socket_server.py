@@ -51,7 +51,7 @@ def send_frame(frame, grid, client_socket):
     client_socket.sendall(chunk)
 
 def shot(cap):
-  frame = cap.capture_array()
+  frame = cv2.rotate(cap.capture_array(), cv2.ROTATE_180)
   #ret,frame = cap.read()
   #if not ret:
   if len(frame)==0:
