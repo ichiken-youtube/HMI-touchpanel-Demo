@@ -36,7 +36,6 @@ def split_image(grid_x, grid_y, grid_number, frame):
   grid_image = frame[start_y:end_y, start_x:end_x]
   return cv2.resize(grid_image, (FRAME_WIDTH, FRAME_HEIGHT))
 
-
 def send_frame(frame, grid, client_socket):
   image_bytes = frame.tobytes()
   size = len(image_bytes)

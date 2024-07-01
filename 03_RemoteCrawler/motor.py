@@ -1,5 +1,6 @@
 import RPi.GPIO as GPIO
 import time
+import settings
 
 PINS={'L_F':3, 'L_R':2 , 'R_F':17, 'R_R':4, 'SC_A':27, 'SC_B':22, 'PWM':18}
 
@@ -85,7 +86,7 @@ def motor(direction, power=50):
     GPIO.output(PINS['SC_B'], GPIO.LOW)
 
   if prev_command != direction and ( direction <= 11 and direction != 5):
-    time.sleep(0.5)
+    time.sleep(settings.MIN_CLICK_TIME)
   prev_command = direction
 
 if __name__ == '__main__':
