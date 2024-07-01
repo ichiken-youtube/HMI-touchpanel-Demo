@@ -1,0 +1,10 @@
+[Unit]
+Description=Socket server for FPVCrawler 
+
+[Service]
+ExecStart=~/HMI-touchpanel-Demo/03_RemoteCrawler/RemoteCrawler.sh
+ExecStop=/bin/kill ${MAINPID}
+Restart=always
+
+[Install]
+WantedBy=default.target
