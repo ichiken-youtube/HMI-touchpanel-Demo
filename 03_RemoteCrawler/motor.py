@@ -15,6 +15,7 @@ PWM = GPIO.PWM ( PINS['PWM'], 50 )
 PWM.start(50)
 
 def motor(direction, power=50):
+  global prev_command
   PWM.ChangeDutyCycle( power )
   #進行方向はテンキーと同じ配列
   if direction == 1:
@@ -83,7 +84,7 @@ def motor(direction, power=50):
     GPIO.output(PINS['SC_A'], GPIO.LOW)
     GPIO.output(PINS['SC_B'], GPIO.LOW)
 
-  if prev_command != direction and ( direction <= 9 and direction != 5):
+  if prev_command != direction and ( direction <= 11 and direction != 5):
     time.sleep(0.5)
   prev_command = direction
 
