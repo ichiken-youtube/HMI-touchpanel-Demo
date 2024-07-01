@@ -62,11 +62,23 @@ def motor(direction, power=50):
     GPIO.output(PINS['L_R'], GPIO.LOW)
     GPIO.output(PINS['R_F'], GPIO.LOW)
     GPIO.output(PINS['R_R'], GPIO.LOW)
+  elif direction == 10:
+    print("↑")
+    GPIO.output(PINS['SC_A'], GPIO.HIGH)
+    GPIO.output(PINS['SC_B'], GPIO.LOW)
+  elif direction == 11:
+    print("↗")
+    GPIO.output(PINS['SC_A'], GPIO.LOW)
+    GPIO.output(PINS['SC_B'], GPIO.HIGH)
   else:
+    print("STOP")
+    PWM.ChangeDutyCycle(0)
     GPIO.output(PINS['L_F'], GPIO.LOW)
     GPIO.output(PINS['L_R'], GPIO.LOW)
     GPIO.output(PINS['R_F'], GPIO.LOW)
     GPIO.output(PINS['R_R'], GPIO.LOW)
+    GPIO.output(PINS['SC_A'], GPIO.LOW)
+    GPIO.output(PINS['SC_B'], GPIO.LOW)
 
 if __name__ == '__main__':
   try:
@@ -89,8 +101,11 @@ if __name__ == '__main__':
         motor(9)
         time.sleep(1)
   except KeyboardInterrupt:
+    print('Release GPIO')
     GPIO.output(PINS['L_F'], GPIO.LOW)
     GPIO.output(PINS['L_R'], GPIO.LOW)
     GPIO.output(PINS['R_F'], GPIO.LOW)
     GPIO.output(PINS['R_R'], GPIO.LOW)
+    GPIO.output(PINS['SC_A'], GPIO.LOW)
+    GPIO.output(PINS['SC_B'], GPIO.LOW)
     GPIO.cleanup()
