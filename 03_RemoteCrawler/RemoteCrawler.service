@@ -2,7 +2,7 @@
 Description=Socket server for FPVCrawler 
 
 [Service]
-ExecStart=~/HMI-touchpanel-Demo/03_RemoteCrawler/RemoteCrawler.sh
+ExecStart=/usr/bin/python3 /home/pi/HMI-touchpanel-Demo/03_RemoteCrawler/socket_server.py
 ExecStop=/bin/kill ${MAINPID}
 Restart=always
 
