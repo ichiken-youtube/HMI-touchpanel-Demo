@@ -115,8 +115,8 @@ def main(client_socket,cap):
 
       elif request[:4] == b'SHOT':
         #print('撮影要求受諾')
-        GRID_X = params[0]
-        GRID_Y = params[1]
+        #GRID_X = params[0]
+        #GRID_Y = params[1]
         print(GRID_X,GRID_Y)
         if grid_flag_mask == 0b0 or None:
           #print('grid_flag_mask初期化')
