@@ -7,10 +7,11 @@ import settings
 
 SERVER_IP = settings.SERVER_IP
 PACKET_SIZE_LIMIT = 800
-FRAME_WIDTH = 0
-FRAME_HEIGHT = 0
+FRAME_WIDTH = 120
+FRAME_HEIGHT = 90
 GRID_X = 2
 GRID_Y = 2
+IMAGE_MAGNIFIC = 2
 grid = 0
 
 def receive_frame(server_socket):
@@ -45,7 +46,7 @@ def main():
   client_socket.sendall(request)
   request = b'SETF' + struct.pack(">II", FRAME_WIDTH,FRAME_HEIGHT)
   client_socket.sendall(request)
-  full_frame = np.zeros((90*2, 120*2, 4), dtype=np.uint8)
+  full_frame = np.zeros((FRAME_HEIGHT*2, FRAME_WIDTH*2, 4), dtype=np.uint8)
   grid = 0
 
   try:
@@ -65,7 +66,8 @@ def main():
           print((grid-1)%GRID_X)
           #full_frame[y*FRAME_HEIGHT:(y+1)*FRAME_HEIGHT, x*FRAME_WIDTH:(x+1)*FRAME_WIDTH] = frame
           full_frame[int((grid-1)/GRID_X)*FRAME_HEIGHT:(int((grid-1)/GRID_X)+1)*FRAME_HEIGHT, ((grid-1)%GRID_X)*FRAME_WIDTH:((grid-1)%GRID_X+1)*FRAME_WIDTH] = frame
-          cv2.imshow('Received Frame', full_frame)
+          resized_image = cv2.resize(full_frame,(GRID_X*FRAME_WIDTH*IMAGE_MAGNIFIC,GRID_Y*FRAME_HEIGHT*IMAGE_MAGNIFIC))
+          cv2.imshow('Received Frame', resized_image)
           time.sleep(0.5)
 
       # 'q'を押すと終了
