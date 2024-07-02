@@ -54,7 +54,7 @@ def main():
       for y in range(GRID_Y):
         for x in range(GRID_X):
           print('撮影要求')
-          request = b'SHOT' + struct.pack(">II", GRID_X, GRID_Y)
+          request = b'SHOT' + struct.pack(">II", 0, 0)
           client_socket.sendall(request)
           request = b'RQST' + struct.pack(">II", 0,0)
           client_socket.sendall(request)
