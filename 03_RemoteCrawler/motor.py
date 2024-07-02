@@ -23,8 +23,8 @@ def motor(direction, power=50):
     print("↙")
     GPIO.output(PINS['L_F'], GPIO.LOW)
     GPIO.output(PINS['L_R'], GPIO.LOW)
-    GPIO.output(PINS['R_F'], GPIO.HIGH)
-    GPIO.output(PINS['R_R'], GPIO.LOW)
+    GPIO.output(PINS['R_F'], GPIO.LOW)
+    GPIO.output(PINS['R_R'], GPIO.HIGH)
   elif direction == 2:
     print("↓")
     GPIO.output(PINS['L_F'], GPIO.LOW)
