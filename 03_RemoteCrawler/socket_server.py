@@ -6,8 +6,8 @@ from picamera2 import Picamera2
 import motor
 
 PACKET_SIZE_LIMIT = 800
-FRAME_WIDTH =120
-FRAME_HEIGHT =90
+FRAME_W =120
+FRAME_H =90
 GRID_X = 1
 GRID_Y = 1
 REQUEST_PACKET_SIZE = 12
@@ -34,14 +34,14 @@ def split_image(grid_x, grid_y, grid_number, frame):
 
   # 指定されたグリッドの画像を取得
   grid_image = frame[start_y:end_y, start_x:end_x]
-  return cv2.resize(grid_image, (FRAME_WIDTH, FRAME_HEIGHT))
+  return cv2.resize(grid_image, (FRAME_W, FRAME_H))
 
 def send_frame(frame, grid, client_socket):
   image_bytes = frame.tobytes()
   size = len(image_bytes)
   # フレームサイズを送信
-  header = struct.pack(">LLLL", FRAME_WIDTH, FRAME_HEIGHT, grid, size)
-  print(FRAME_WIDTH, FRAME_HEIGHT, grid, size)
+  header = struct.pack(">LLLL", FRAME_W, FRAME_H, grid, size)
+  print(FRAME_W, FRAME_H, grid, size)
   client_socket.sendall(header)
   print('size:'+str(size))
   # フレームデータを送信
@@ -61,6 +61,8 @@ def shot(cap):
 def main(client_socket,cap):
   global grid_flag_mask
   global latest_grid_flag
+  global FRAME_H, FRAME_W
+  global GRID_X, GRID_Y
   
   # ソケット設定
   client_socket.settimeout(60)
@@ -128,6 +130,16 @@ def main(client_socket,cap):
 
       elif request[:4] == b'PING':
         client_socket.sendall(b'PONG')
+      
+      elif request[:4] == b'SETF':
+        FRAME_W = params[0]
+        FRAME_H = params[1]
+        print('FRAME_W:'+str(FRAME_W), 'FRAME_H:'+str(FRAME_H))
+
+      elif request[:4] == b'SETG':
+        GRID_X = params[0]
+        GRID_Y = params[1]
+        print('GRID_X:'+str(GRID_X), 'GRID_Y:'+str(GRID_Y))
         
       else:
         pass

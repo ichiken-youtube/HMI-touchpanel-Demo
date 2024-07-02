@@ -40,6 +40,11 @@ def main():
   client_socket.settimeout(10)
   client_socket.connect((SERVER_IP, 8000))
   print('サーバーに接続しました')
+  
+  request = b'SETG' + struct.pack(">II", GRID_X,GRID_Y)
+  client_socket.sendall(request)
+  request = b'SETF' + struct.pack(">II", FRAME_WIDTH,FRAME_HEIGHT)
+  client_socket.sendall(request)
   full_frame = np.zeros((90*2, 120*2, 4), dtype=np.uint8)
   grid = 0
 
@@ -61,7 +66,7 @@ def main():
           #full_frame[y*FRAME_HEIGHT:(y+1)*FRAME_HEIGHT, x*FRAME_WIDTH:(x+1)*FRAME_WIDTH] = frame
           full_frame[int((grid-1)/GRID_X)*FRAME_HEIGHT:(int((grid-1)/GRID_X)+1)*FRAME_HEIGHT, ((grid-1)%GRID_X)*FRAME_WIDTH:((grid-1)%GRID_X+1)*FRAME_WIDTH] = frame
           cv2.imshow('Received Frame', full_frame)
-          time.sleep(1)
+          time.sleep(0.5)
 
       # 'q'を押すと終了
       if cv2.waitKey(1) & 0xFF == ord('q'):
